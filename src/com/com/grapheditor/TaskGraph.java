@@ -1,5 +1,6 @@
 package com.com.grapheditor;
 
+import com.analyze.AnalyzeManager;
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxStencilShape;
@@ -36,6 +37,7 @@ public class TaskGraph extends JPanel {
         JMenuItem saveItem;
         JMenuItem hasCycleItem;
         JMenuItem generateItem;
+        JMenuItem queueWeightItem;
         popupPanel.add(taskItem = new JMenuItem("Add Task"));
         popupPanel.addSeparator();
         popupPanel.add(openItem = new JMenuItem("Open"));
@@ -45,6 +47,8 @@ public class TaskGraph extends JPanel {
         popupPanel.add(hasCycleItem = new JMenuItem("has Cycle ?"));
         popupPanel.addSeparator();
         popupPanel.add(generateItem = new JMenuItem("Generate graph"));
+        popupPanel.addSeparator();
+        popupPanel.add(queueWeightItem = new JMenuItem("Queue: weight order"));
 
         generateItem.addActionListener(new ActionListener() {
             private JTabbedPane tabPane;
@@ -85,6 +89,12 @@ public class TaskGraph extends JPanel {
                 boolean hasCycle = ActionManager.hasCycle(graph);
                 String message = "has cycle: ";
                 JOptionPane.showMessageDialog(null, message + hasCycle);
+            }
+        });
+        queueWeightItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(AnalyzeManager.getWeightOrderQueue(graph));
             }
         });
 
