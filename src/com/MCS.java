@@ -1,7 +1,7 @@
 package com;
 
-import com.com.grapheditor.SystemGraph;
-import com.com.grapheditor.TaskGraph;
+import com.grapheditor.SystemGraph;
+import com.grapheditor.TaskGraph;
 
 import javax.swing.*;
 import java.awt.*;

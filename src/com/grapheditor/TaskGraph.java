@@ -1,5 +1,6 @@
-package com.com.grapheditor;
+package com.grapheditor;
 
+import com.analyze.AnalyzeManager;
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxStencilShape;
@@ -19,87 +20,115 @@ import java.io.IOException;
 import java.util.Hashtable;
 
 /**
- * Created by Andrew on 21.03.2015.
+ * Created by Andrew on 08.03.2015.
  */
-public class SystemGraph extends JPanel {
-    static mxGraph graph;
-    static mxGraphComponent graphPanel;
-    static int X;
-    static int Y;
-    static JPopupMenu popupPanel;
+public class TaskGraph extends JPanel {
+    public static mxGraph graph;
+    public static mxGraphComponent graphPanel;
+    public static int X;
+    public static int Y;
+    public static JPopupMenu popupPanel;
 
-    public SystemGraph(){
+    public TaskGraph(JTabbedPane tabPane){
         //popupPanel
         popupPanel = new JPopupMenu();
-        JMenuItem sysItem;
+        JMenuItem taskItem;
         JMenuItem openItem;
         JMenuItem saveItem;
-        JMenuItem checkItem;
-        popupPanel.add(sysItem = new JMenuItem("Add System"));
+        JMenuItem hasCycleItem;
+        JMenuItem generateItem;
+        JMenuItem queueWeightItem;
+        popupPanel.add(taskItem = new JMenuItem("Add Task"));
         popupPanel.addSeparator();
         popupPanel.add(openItem = new JMenuItem("Open"));
         popupPanel.addSeparator();
         popupPanel.add(saveItem = new JMenuItem("Save as"));
         popupPanel.addSeparator();
-        popupPanel.add(checkItem = new JMenuItem("Check connectivity"));
+        popupPanel.add(hasCycleItem = new JMenuItem("has Cycle ?"));
+        popupPanel.addSeparator();
+        popupPanel.add(generateItem = new JMenuItem("Generate graph"));
+        popupPanel.addSeparator();
+        popupPanel.add(queueWeightItem = new JMenuItem("Queue: weight order"));
 
-        checkItem.addActionListener(new ActionListener() {
+        generateItem.addActionListener(new ActionListener() {
+            private JTabbedPane tabPane;
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "connectivity: " + ActionManager.checkConnectivity(graph));
+                ActionManager.generateGraphAction(tabPane);
             }
-        });
+            public ActionListener setTabPane(JTabbedPane tabPane){
+                this.tabPane = tabPane;
+                return this;
+            }
+        }.setTabPane(tabPane));
 
-        sysItem.addActionListener(new ActionListener() {
+        taskItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 addVertex();
             }
         });
+
         openItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ActionManager.openFileAction(graph);
             }
         });
+
         saveItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ActionManager.saveAsFileAction(graph);
             }
         });
+
+        hasCycleItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean hasCycle = ActionManager.hasCycle(graph);
+                String message = "has cycle: ";
+                JOptionPane.showMessageDialog(null, message + hasCycle);
+            }
+        });
+        queueWeightItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(AnalyzeManager.getWeightOrderQueue(graph));
+            }
+        });
+
         init(this);
     }
 
-    public  static void init(SystemGraph systemgraph){
+    public  static void init( TaskGraph taskGraph ){
         //init graph
         graph = new mxGraph();
         graphPanel = new mxGraphComponent(graph);
         graph.setAllowDanglingEdges(false);
-        graphPanel.getGraphControl().addMouseListener(new SystemGraphMouselistener(graphPanel,popupPanel));
-        systemgraph.setLayout(new BorderLayout());
-        systemgraph.add(graphPanel, BorderLayout.CENTER);
+        graphPanel.getGraphControl().addMouseListener(new TaskGraphMouselistener(graphPanel, popupPanel));
+        taskGraph.setLayout(new BorderLayout());
+        taskGraph.add(graphPanel, BorderLayout.CENTER);
 
         buildGraphEnvironment();
     }
 
     public static void buildGraphEnvironment() {
         try  {
-            String nodeXMLSystemNode = mxUtils.readFile("D:\\ideaworkspace\\ModelingCS\\shapes_style\\expended-node.shape");
-            addStencilShape(nodeXMLSystemNode);
+            String nodeXMLTaskNode = mxUtils.readFile("D:\\ideaworkspace\\ModelingCS\\shapes_style\\circle.shape");
+            addStencilShape(nodeXMLTaskNode);
         }
-        catch(IOException ioe) {
-            System.out.println("IOException: " + ioe);
+        catch(IOException e) {
+            System.out.println("IOException: " + e);
         }
         // stylesheet
         mxStylesheet stylesheet = graph.getStylesheet();
         Hashtable<String, Object> style = new Hashtable<String, Object>();
         style.put(mxConstants.STYLE_RESIZABLE, false);
-        style.put(mxConstants.STYLE_SHAPE, "Misc - expended node");
+        style.put(mxConstants.STYLE_SHAPE, "Geometric - Perfect Circle");
         style.put(mxConstants.STYLE_ALIGN, mxConstants.ALIGN_CENTER);
-        graph.getStylesheet().getDefaultEdgeStyle().put(mxConstants.STYLE_ENDARROW,mxConstants.NONE);
-        stylesheet.putCellStyle("SYSTEM_CELL_STYLE", style);
-        graph.setStylesheet(stylesheet);
+        graph.getStylesheet().getDefaultEdgeStyle().put(mxConstants.STYLE_ROUNDED, true);
+        stylesheet.putCellStyle("TASK_CELL_STYLE", style);
         graph.setAllowLoops(false);
         graph.setAllowDanglingEdges(false);
         graph.setLabelsClipped(true);
@@ -117,28 +146,33 @@ public class SystemGraph extends JPanel {
     public static void addVertex(){
         graph.getModel().beginUpdate();
         try {
-            mxCell cell = (mxCell)graph.insertVertex(graph.getDefaultParent(), null, "", X, Y, 70,70,"SYSTEM_CELL_STYLE");
-            cell.setValue("id = "+(Integer.parseInt(cell.getId())-1)+"\n\n"+"1");
+            mxCell cell = (mxCell)graph.insertVertex(graph.getDefaultParent(), null, "", X, Y, 50,50,"TASK_CELL_STYLE");
+            cell.setValue((Integer.parseInt(cell.getId())-1)+"\n"+"1");
         }
         finally {
             graph.getModel().endUpdate();
         }
     }
 
-    private static class SystemGraphMouselistener extends MouseAdapter {
+
+    private static class TaskGraphMouselistener extends MouseAdapter{
+
         private mxGraphComponent graphComponent;
         private JPopupMenu popupPanel;
 
-        SystemGraphMouselistener(mxGraphComponent graphComponent, JPopupMenu popupPanel){
+        TaskGraphMouselistener(mxGraphComponent graphComponent, JPopupMenu popupPanel){
             this.graphComponent = graphComponent;
             this.popupPanel = popupPanel;
         }
+
         public void mouseClicked(MouseEvent event) {
-            ActionManager.mouseClickedAction(event,graph,graphComponent,"Enter system productivity",false);
+            ActionManager.mouseClickedAction(event,graph,graphComponent,"Enter task value",true);
         }
 
         public void mouseReleased(MouseEvent event){
-            ActionManager.mouseReleasedAction(event,graph,graphComponent,popupPanel,false);
+            ActionManager.mouseReleasedAction(event,graph,graphComponent,popupPanel,true);
         }
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.com.grapheditor;
+package com.grapheditor;
 
 import com.mxgraph.io.mxCodec;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
