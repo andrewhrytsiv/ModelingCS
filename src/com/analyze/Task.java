@@ -5,8 +5,10 @@ package com.analyze;
  */
 public class Task implements Comparable<Task>{
     private Integer id;
-
     private Integer weight;
+    private Integer criticalPath;
+    private Integer criticalPathWithVertex;
+    private double Pr;
 
     public Task(Integer id, Integer weight){
         this.id = id;
@@ -21,13 +23,52 @@ public class Task implements Comparable<Task>{
         return weight;
     }
 
+    public Integer getCriticalPath() {
+        return criticalPath;
+    }
+
+    public void setCriticalPath(Integer criticalPath) {
+        this.criticalPath = criticalPath;
+    }
+
+    public Integer getCriticalPathWithVertex() {
+        return criticalPathWithVertex;
+    }
+
+    public void setCriticalPathWithVertex(Integer criticalPathWithvertex) {
+        this.criticalPathWithVertex = criticalPathWithvertex;
+    }
+
+
+
     @Override
     public String toString() {
-        return "{id=" + id + " : w=" + weight +'}';
+        return id +" w="+weight+":" +criticalPath+";"+ criticalPathWithVertex+"|"+ Pr;
     }
 
     @Override
     public int compareTo(Task obj) {
         return weight - obj.getWeight();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Task task = (Task) o;
+
+        if (id != null ? !id.equals(task.id) : task.id != null) return false;
+        return !(weight != null ? !weight.equals(task.weight) : task.weight != null);
+
+    }
+
+    public double getPr() {
+        return Pr;
+    }
+
+    public void setPr(double pr) {
+        Pr = pr;
+    }
+
 }

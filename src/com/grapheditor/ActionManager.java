@@ -151,6 +151,7 @@ public class ActionManager {
 
     public static boolean hasCycle(mxGraph graph){
         DefaultDirectedGraph<String, DefaultEdge> graphNoCycle = new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+        graphNoCycle.getAllEdges(null,null);
         graph.clearSelection();
         graph.selectAll();
         Object[] cells = graph.getSelectionCells();

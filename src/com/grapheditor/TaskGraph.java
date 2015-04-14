@@ -38,6 +38,8 @@ public class TaskGraph extends JPanel {
         JMenuItem hasCycleItem;
         JMenuItem generateItem;
         JMenuItem queueWeightItem;
+        JMenuItem queueCriticapPathItem;
+        JMenuItem queueNormalCriticapPathItem;
         popupPanel.add(taskItem = new JMenuItem("Add Task"));
         popupPanel.addSeparator();
         popupPanel.add(openItem = new JMenuItem("Open"));
@@ -49,14 +51,20 @@ public class TaskGraph extends JPanel {
         popupPanel.add(generateItem = new JMenuItem("Generate graph"));
         popupPanel.addSeparator();
         popupPanel.add(queueWeightItem = new JMenuItem("Queue: weight order"));
+        popupPanel.addSeparator();
+        popupPanel.add(queueCriticapPathItem = new JMenuItem("Queue: critical path order"));
+        popupPanel.addSeparator();
+        popupPanel.add(queueNormalCriticapPathItem = new JMenuItem("Queue: critical path order with normalization"));
 
         generateItem.addActionListener(new ActionListener() {
             private JTabbedPane tabPane;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 ActionManager.generateGraphAction(tabPane);
             }
-            public ActionListener setTabPane(JTabbedPane tabPane){
+
+            public ActionListener setTabPane(JTabbedPane tabPane) {
                 this.tabPane = tabPane;
                 return this;
             }
@@ -95,6 +103,18 @@ public class TaskGraph extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(AnalyzeManager.getWeightOrderQueue(graph));
+            }
+        });
+        queueCriticapPathItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(AnalyzeManager.getCriticalPathOrderQueue(graph));
+            }
+        });
+        queueNormalCriticapPathItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(AnalyzeManager.getCriticalPathNormalizationOrderQueue(graph));
             }
         });
 
