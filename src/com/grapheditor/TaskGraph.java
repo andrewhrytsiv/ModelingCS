@@ -38,7 +38,7 @@ public class TaskGraph extends JPanel {
         JMenuItem hasCycleItem;
         JMenuItem generateItem;
         JMenuItem queueWeightItem;
-        JMenuItem queueCriticapPathItem;
+        JMenuItem queueInverseCriticapPathItem;
         JMenuItem queueNormalCriticapPathItem;
         popupPanel.add(taskItem = new JMenuItem("Add Task"));
         popupPanel.addSeparator();
@@ -52,7 +52,7 @@ public class TaskGraph extends JPanel {
         popupPanel.addSeparator();
         popupPanel.add(queueWeightItem = new JMenuItem("Queue: weight order"));
         popupPanel.addSeparator();
-        popupPanel.add(queueCriticapPathItem = new JMenuItem("Queue: critical path order"));
+        popupPanel.add(queueInverseCriticapPathItem = new JMenuItem("Queue: inverse critical path order"));
         popupPanel.addSeparator();
         popupPanel.add(queueNormalCriticapPathItem = new JMenuItem("Queue: critical path order with normalization"));
 
@@ -105,10 +105,10 @@ public class TaskGraph extends JPanel {
                 System.out.println(AnalyzeManager.getWeightOrderQueue(graph));
             }
         });
-        queueCriticapPathItem.addActionListener(new ActionListener() {
+        queueInverseCriticapPathItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(AnalyzeManager.getCriticalPathOrderQueue(graph));
+                System.out.println(AnalyzeManager.getInverseCriticalPathOrderQueue(graph));
             }
         });
         queueNormalCriticapPathItem.addActionListener(new ActionListener() {

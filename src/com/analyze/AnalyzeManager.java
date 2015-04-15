@@ -8,6 +8,7 @@ import java.util.Comparator;
 /**
  * Created by Andrew on 31.03.2015.
  */
+//v6,7=3-4
 public class AnalyzeManager {
     public static ArrayList<Task> getCriticalPathNormalizationOrderQueue(mxGraph graph){
         DirectedAcyclicGraph dag = getDAG(graph);
@@ -28,16 +29,16 @@ public class AnalyzeManager {
         });
         return queue;
     }
-    public static ArrayList<Task> getCriticalPathOrderQueue(mxGraph graph){
+    public static ArrayList<Task> getInverseCriticalPathOrderQueue(mxGraph graph){
         DirectedAcyclicGraph dag = getDAG(graph);
-        ArrayList<Task> queue = dag.getVertexCriticalPathWeights();
+        ArrayList<Task> queue = dag.getVertexInverseCriticalPathWeights();
         System.out.println(queue);
         Collections.sort(queue,new Comparator<Task>() {
             @Override
             public int compare(Task o1, Task o2) {
-                int x = o1.getCriticalPath()-o2.getCriticalPath();
+                int x = o1.getCriticalPathWithVertex()-o2.getCriticalPathWithVertex();
                 if(x == 0){
-                    return o2.getCriticalPathWithVertex()-o1.getCriticalPathWithVertex();
+                    return o2.getWeight()-o1.getWeight();
                 }
                 return x;
             }

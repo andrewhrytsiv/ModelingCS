@@ -45,10 +45,37 @@ public class DirectedAcyclicGraph {
         return taskList;
     }
 
+
+    public ArrayList<Task> getVertexInverseCriticalPathWeights(){
+        ArrayList<Task> taskList = new ArrayList<Task>();
+        for(Map.Entry<Integer,Task> t : vertexMap.entrySet()){
+            String path = getInverseCriticalPath(t.getKey());
+            Task task = t.getValue();
+            task.setCriticalPath(pathWeight(path));
+            task.setCriticalPathWithVertex(getCriticalPathVertexWeight(t.getKey()));
+            taskList.add(task);
+        }
+        return taskList;
+    }
+
+
+
     private String getCriticalPath(Integer sourseId){
         vertexPaths = new ArrayList<String>();
         ArrayList<Integer> pathWeightList =  new ArrayList<Integer>();
         buildPaths(sourseId,"");
+        for(String path : vertexPaths){
+            pathWeightList.add(pathWeight(path));
+        }
+        Integer maxWeight = Collections.max(pathWeightList);
+        int criticalPathIndex = pathWeightList.indexOf(maxWeight);
+        return vertexPaths.get(criticalPathIndex).trim();
+    }
+
+    private String getInverseCriticalPath(Integer sourseId){
+        vertexPaths = new  ArrayList<String>();
+        ArrayList<Integer> pathWeightList =  new ArrayList<Integer>();
+        buildInversePaths(sourseId,"");
         for(String path : vertexPaths){
             pathWeightList.add(pathWeight(path));
         }
@@ -103,6 +130,19 @@ public class DirectedAcyclicGraph {
         return weight;
     }
 
+    private void buildInversePaths(Integer fromId, String path){
+        ArrayList<Integer> linksID = containsInverseLinkWithSourseId(fromId);
+        if(linksID.size() > 0){
+            for(int i=0; i<linksID.size(); i++){
+                String newPath =path + " " + linksID.get(i);
+                buildInversePaths(edgeMap.get(linksID.get(i)).getSourceId(),newPath);
+            }
+        }else{
+            //start point vertex
+            vertexPaths.add(path);
+        }
+    }
+
     private void buildPaths(Integer fromId, String path){
         ArrayList<Integer> linksID = containsLinkWithSourseId(fromId);
         if(linksID.size() > 0){
@@ -114,6 +154,16 @@ public class DirectedAcyclicGraph {
             //end point vertex
             vertexPaths.add(path);
         }
+    }
+    private  ArrayList<Integer> containsInverseLinkWithSourseId(Integer sourseId){
+        ArrayList<Integer> linksID = new ArrayList<Integer>();
+        for(Map.Entry<Integer,Link> e : edgeMap.entrySet()){
+            Link link = e.getValue();
+            if(link.getTargetId().equals(sourseId)){
+                linksID.add(link.getId());
+            }
+        }
+        return linksID;
     }
 
     private ArrayList<Integer> containsLinkWithSourseId(Integer sourseId){
