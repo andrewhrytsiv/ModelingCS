@@ -1,4 +1,4 @@
-package com.analyze;
+package com.analyze.tasks;
 
 /**
  * Created by Andrew on 08.04.2015.

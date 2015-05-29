@@ -1,6 +1,6 @@
 package com.grapheditor;
 
-import com.analyze.AnalyzeManager;
+import com.analyze.tasks.TaskAnalyzeManager;
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxStencilShape;
@@ -102,19 +102,19 @@ public class TaskGraph extends JPanel {
         queueWeightItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(AnalyzeManager.getWeightOrderQueue(graph));
+                System.out.println(TaskAnalyzeManager.getWeightOrderQueue(graph));
             }
         });
         queueInverseCriticapPathItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(AnalyzeManager.getInverseCriticalPathOrderQueue(graph));
+                System.out.println(TaskAnalyzeManager.getInverseCriticalPathOrderQueue(graph));
             }
         });
         queueNormalCriticapPathItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(AnalyzeManager.getCriticalPathNormalizationOrderQueue(graph));
+                System.out.println(TaskAnalyzeManager.getCriticalPathNormalizationOrderQueue(graph));
             }
         });
 
@@ -186,7 +186,7 @@ public class TaskGraph extends JPanel {
         }
 
         public void mouseClicked(MouseEvent event) {
-            ActionManager.mouseClickedAction(event,graph,graphComponent,"Enter task value",true);
+            ActionManager.mouseClickedAction(event,graph,graphComponent,"Enter tasks value",true);
         }
 
         public void mouseReleased(MouseEvent event){

@@ -1,4 +1,4 @@
-package com.analyze;
+package com.analyze.tasks;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,6 +57,24 @@ public class DirectedAcyclicGraph {
         }
         return taskList;
     }
+
+    /*public void connectivity(){
+        for(Map.Entry<Integer,Task> taskEntry: vertexMap.entrySet()){
+            Integer taskId = taskEntry.getValue().getId();
+            int currentTaskConnectivity = 0;
+            for(Map.Entry<Integer,Link> lineEntry: edgeMap.entrySet()){
+                Integer sourceId = lineEntry.getValue().getSourceId();
+                Integer targetId = lineEntry.getValue().getTargetId();
+                if(sourceId.equals(taskId)){
+                    currentTaskConnectivity++;
+                }
+                if(targetId.equals(taskId)){
+                    currentTaskConnectivity++;
+                }
+            }
+            System.out.println("taskId="+taskId+" : " + currentTaskConnectivity);
+        }
+    }*/
 
 
 

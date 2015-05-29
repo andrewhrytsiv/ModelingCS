@@ -8,6 +8,7 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
+import com.scheduler.SchedulerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +36,7 @@ public class SystemGraph extends JPanel {
         JMenuItem openItem;
         JMenuItem saveItem;
         JMenuItem checkItem;
+        JMenuItem schedulerItem;
         popupPanel.add(sysItem = new JMenuItem("Add System"));
         popupPanel.addSeparator();
         popupPanel.add(openItem = new JMenuItem("Open"));
@@ -42,6 +44,8 @@ public class SystemGraph extends JPanel {
         popupPanel.add(saveItem = new JMenuItem("Save as"));
         popupPanel.addSeparator();
         popupPanel.add(checkItem = new JMenuItem("Check connectivity"));
+        popupPanel.addSeparator();
+        popupPanel.add(schedulerItem = new JMenuItem("Scheduler"));
 
         checkItem.addActionListener(new ActionListener() {
             @Override
@@ -68,6 +72,13 @@ public class SystemGraph extends JPanel {
                 ActionManager.saveAsFileAction(graph);
             }
         });
+        schedulerItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SchedulerManager.initTaskQueue();
+            }
+        });
+
         init(this);
     }
 

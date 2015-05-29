@@ -1,16 +1,19 @@
-package com.analyze;
+package com.analyze.tasks;
+
 import com.mxgraph.model.mxCell;
 import com.mxgraph.view.mxGraph;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+
 /**
  * Created by Andrew on 31.03.2015.
  */
 //v6,7=3-4
-public class AnalyzeManager {
-    public static ArrayList<Task> getCriticalPathNormalizationOrderQueue(mxGraph graph){
+public class TaskAnalyzeManager {
+    public static List<Task> getCriticalPathNormalizationOrderQueue(mxGraph graph){
         DirectedAcyclicGraph dag = getDAG(graph);
         ArrayList<Task> queue = dag.getVertexCriticalPathWeights();
         dag.getCriticalPathWeightsWithNormalization(queue, dag.Ncr, dag.Tcr);
@@ -29,14 +32,16 @@ public class AnalyzeManager {
         });
         return queue;
     }
-    public static ArrayList<Task> getInverseCriticalPathOrderQueue(mxGraph graph){
+    public static List<Task> getInverseCriticalPathOrderQueue(mxGraph graph){
         DirectedAcyclicGraph dag = getDAG(graph);
         ArrayList<Task> queue = dag.getVertexInverseCriticalPathWeights();
+        System.out.println(dag.vertexMap);
+        System.out.println(dag.edgeMap);
         System.out.println(queue);
         Collections.sort(queue,new Comparator<Task>() {
             @Override
             public int compare(Task o1, Task o2) {
-                int x = o1.getCriticalPathWithVertex()-o2.getCriticalPathWithVertex();
+                int x = o1.getCriticalPath()-o2.getCriticalPath();
                 if(x == 0){
                     return o2.getWeight()-o1.getWeight();
                 }
