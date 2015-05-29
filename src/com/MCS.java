@@ -1,7 +1,7 @@
 package com;
 
-import com.grapheditor.SystemGraph;
-import com.grapheditor.TaskGraph;
+import com.grapheditor.SystemGraphPanel;
+import com.grapheditor.TaskGraphPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +15,8 @@ public class MCS{
     public MCS(){
         frame = new JFrame("MCS");
         tabPane = new JTabbedPane();
-        tabPane.add(new TaskGraph(tabPane));
-        tabPane.add(new SystemGraph());
+        tabPane.add(new TaskGraphPanel(tabPane));
+        tabPane.add(new SystemGraphPanel());
         tabPane.setTitleAt(0, "    Task Graph    ");
         tabPane.setTitleAt(1, "    System Graph    ");
     }

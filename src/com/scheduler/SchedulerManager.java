@@ -2,7 +2,7 @@ package com.scheduler;
 
 import com.analyze.tasks.TaskAnalyzeManager;
 import com.analyze.tasks.Task;
-import com.grapheditor.TaskGraph;
+import com.grapheditor.TaskGraphPanel;
 
 import javax.swing.*;
 import java.util.List;
@@ -13,22 +13,21 @@ import java.util.List;
 public class SchedulerManager {
     static List<Task> taskQueue;
 
-    public static void initTaskQueue(){
+    public static List<Task> initTaskQueue(){
         Object[] initParam = SchedulerManager.getParam();
         Config queueType = (Config) initParam[3];
         switch (queueType){
             case WEIGHT_ORDER:
-                taskQueue =  TaskAnalyzeManager.getWeightOrderQueue(TaskGraph.graph);
+                taskQueue =  TaskAnalyzeManager.getWeightOrderQueue(TaskGraphPanel.graph);
                 break;
             case INVERSE_CRITICAL_PATH_ORDER:
-                taskQueue =  TaskAnalyzeManager.getInverseCriticalPathOrderQueue(TaskGraph.graph);
+                taskQueue =  TaskAnalyzeManager.getInverseCriticalPathOrderQueue(TaskGraphPanel.graph);
                 break;
             case CRITICAL_PATH_ORDER_WITH_NORMALIZATION:
-                taskQueue = TaskAnalyzeManager.getCriticalPathNormalizationOrderQueue(TaskGraph.graph);
+                taskQueue = TaskAnalyzeManager.getCriticalPathNormalizationOrderQueue(TaskGraphPanel.graph);
                 break;
         }
-        System.out.println(taskQueue);
-
+        return taskQueue;
     }
 
     private  static Object[] getParam(){

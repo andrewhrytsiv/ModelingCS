@@ -1,5 +1,7 @@
 package com.grapheditor;
 
+import com.analyze.processors.ProcessorAnalyzeManager;
+import com.analyze.processors.SystemGraph;
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxStencilShape;
@@ -8,7 +10,6 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
-import com.scheduler.SchedulerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,14 +23,14 @@ import java.util.Hashtable;
 /**
  * Created by Andrew on 21.03.2015.
  */
-public class SystemGraph extends JPanel {
+public class SystemGraphPanel extends JPanel {
     static mxGraph graph;
     static mxGraphComponent graphPanel;
     static int X;
     static int Y;
     static JPopupMenu popupPanel;
 
-    public SystemGraph(){
+    public SystemGraphPanel(){
         //popupPanel
         popupPanel = new JPopupMenu();
         JMenuItem sysItem;
@@ -75,14 +76,18 @@ public class SystemGraph extends JPanel {
         schedulerItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SchedulerManager.initTaskQueue();
+                //java.util.List<Task> tasks = SchedulerManager.initTaskQueue();
+                SystemGraph sg = ProcessorAnalyzeManager.getSystemGraph(SystemGraphPanel.graph);
+                System.out.println(sg.processorMap);
+                System.out.println(sg.logicalLinkMap);
+                sg.setConnectivity();
             }
         });
 
         init(this);
     }
 
-    public  static void init(SystemGraph systemgraph){
+    public  static void init(SystemGraphPanel systemgraph){
         //init graph
         graph = new mxGraph();
         graphPanel = new mxGraphComponent(graph);
