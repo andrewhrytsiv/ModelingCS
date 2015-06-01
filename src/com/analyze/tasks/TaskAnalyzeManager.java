@@ -13,11 +13,13 @@ import java.util.List;
  */
 //v6,7=3-4
 public class TaskAnalyzeManager {
+
+
     public static List<Task> getCriticalPathNormalizationOrderQueue(mxGraph graph){
         DirectedAcyclicGraph dag = getDAG(graph);
         ArrayList<Task> queue = dag.getVertexCriticalPathWeights();
         dag.getCriticalPathWeightsWithNormalization(queue, dag.Ncr, dag.Tcr);
-        System.out.println(queue);
+        /*System.out.println(queue);*/
         Collections.sort(queue,new Comparator<Task>() {
             @Override
             public int compare(Task o1, Task o2) {
@@ -35,9 +37,9 @@ public class TaskAnalyzeManager {
     public static List<Task> getInverseCriticalPathOrderQueue(mxGraph graph){
         DirectedAcyclicGraph dag = getDAG(graph);
         ArrayList<Task> queue = dag.getVertexInverseCriticalPathWeights();
-        System.out.println(dag.vertexMap);
+        /*System.out.println(dag.vertexMap);
         System.out.println(dag.edgeMap);
-        System.out.println(queue);
+        System.out.println(queue);*/
         Collections.sort(queue,new Comparator<Task>() {
             @Override
             public int compare(Task o1, Task o2) {
@@ -50,7 +52,7 @@ public class TaskAnalyzeManager {
         });
         return queue;
     }
-    private static DirectedAcyclicGraph getDAG(mxGraph graph){
+    public static DirectedAcyclicGraph getDAG(mxGraph graph){
         graph.selectAll();
         Object[] cells = graph.getSelectionCells();
         DirectedAcyclicGraph dag = new DirectedAcyclicGraph();

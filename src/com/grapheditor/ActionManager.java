@@ -42,7 +42,7 @@ public class ActionManager {
         Double connectivity = (Double) graphParam[3];
         //create new graph model
         tabPane.remove(0);
-        TaskGraphPanel task = new TaskGraphPanel(tabPane);
+        TaskPanel task = new TaskPanel(tabPane);
         tabPane.add(task,0);
         tabPane.setTitleAt(0, "    Task Graph    ");
         tabPane.setSelectedIndex(0);
@@ -261,11 +261,11 @@ public class ActionManager {
             if (cell == null)
             {
                 if(isTask){
-                    TaskGraphPanel.X = event.getX();
-                    TaskGraphPanel.Y = event.getY();
+                    TaskPanel.X = event.getX();
+                    TaskPanel.Y = event.getY();
                 }else{
-                    SystemGraphPanel.X = event.getX();
-                    SystemGraphPanel.Y = event.getY();
+                    SystemPanel.X = event.getX();
+                    SystemPanel.Y = event.getY();
                 }
                 popupPanel.show(graphComponent,event.getX(), event.getY());
             }

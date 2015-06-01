@@ -1,7 +1,9 @@
 package com.grapheditor;
 
-import com.analyze.processors.ProcessorAnalyzeManager;
 import com.analyze.processors.SystemGraph;
+import com.analyze.tasks.DirectedAcyclicGraph;
+import com.analyze.tasks.Task;
+import com.analyze.tasks.TaskAnalyzeManager;
 import com.mxgraph.canvas.mxGraphics2DCanvas;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.shape.mxStencilShape;
@@ -10,6 +12,8 @@ import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
+import com.scheduler.Config;
+import com.scheduler.SchedulerManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,19 +22,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by Andrew on 21.03.2015.
  */
-public class SystemGraphPanel extends JPanel {
+public class SystemPanel extends JPanel {
     static mxGraph graph;
     static mxGraphComponent graphPanel;
     static int X;
     static int Y;
     static JPopupMenu popupPanel;
 
-    public SystemGraphPanel(){
+    public SystemPanel(){
         //popupPanel
         popupPanel = new JPopupMenu();
         JMenuItem sysItem;
@@ -76,18 +81,25 @@ public class SystemGraphPanel extends JPanel {
         schedulerItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //java.util.List<Task> tasks = SchedulerManager.initTaskQueue();
-                SystemGraph sg = ProcessorAnalyzeManager.getSystemGraph(SystemGraphPanel.graph);
-                System.out.println(sg.processorMap);
-                System.out.println(sg.logicalLinkMap);
-                sg.setConnectivity();
+                Object[] initParam = SchedulerManager.getParam();
+                Integer physLinks = (Integer)initParam[2] + 1;
+                Config duplexMode = (Config)initParam[0];
+                System.out.println(physLinks);
+                System.out.println(duplexMode);
+                DirectedAcyclicGraph dag = TaskAnalyzeManager.getDAG(TaskPanel.graph);
+                //System.out.println(dag.vertexMap);
+                //System.out.println(dag.edgeMap);
+                List<Task> taskQueue = SchedulerManager.getTaskQueue(initParam);
+                //System.out.println(taskQueue);
+                SystemGraph system = SystemGraph.getSystemGraph(SystemPanel.graph);
+                SchedulerManager.buildJSON(dag.getValidationIdMap(), dag, taskQueue,system, system.getValidationIdMap(),physLinks, duplexMode );
             }
         });
 
         init(this);
     }
 
-    public  static void init(SystemGraphPanel systemgraph){
+    public  static void init(SystemPanel systemgraph){
         //init graph
         graph = new mxGraph();
         graphPanel = new mxGraphComponent(graph);

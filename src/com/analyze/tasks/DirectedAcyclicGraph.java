@@ -1,11 +1,7 @@
 package com.analyze.tasks;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
 /**
  * Created by Andrew on 08.04.2015.
  */
@@ -15,6 +11,19 @@ public class DirectedAcyclicGraph {
     public Integer Ncr;
     public Integer Tcr;
     private ArrayList<String> vertexPaths;
+
+
+    public Map<Integer,Integer> getValidationIdMap(){
+        Map<Integer,Integer> map = new HashMap<Integer, Integer>();
+        Map<Integer,Task> sorted = new TreeMap<Integer, Task>(vertexMap);
+        Iterator<Integer> it = sorted.keySet().iterator();
+        int i=0;
+        while(it.hasNext()){
+            map.put(it.next(), i); //task_id , custom_vector_id
+            i++;
+        }
+        return map;
+    }
 
     public ArrayList<Task> getCriticalPathWeightsWithNormalization(ArrayList<Task> list, Integer maxNcr, Integer maxTcr){
         for(Task task : list){

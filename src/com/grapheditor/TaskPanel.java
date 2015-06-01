@@ -22,14 +22,14 @@ import java.util.Hashtable;
 /**
  * Created by Andrew on 08.03.2015.
  */
-public class TaskGraphPanel extends JPanel {
+public class TaskPanel extends JPanel {
     public static mxGraph graph;
     public static mxGraphComponent graphPanel;
     public static int X;
     public static int Y;
     public static JPopupMenu popupPanel;
 
-    public TaskGraphPanel(JTabbedPane tabPane){
+    public TaskPanel(JTabbedPane tabPane){
         //popupPanel
         popupPanel = new JPopupMenu();
         JMenuItem taskItem;
@@ -121,7 +121,7 @@ public class TaskGraphPanel extends JPanel {
         init(this);
     }
 
-    public  static void init( TaskGraphPanel taskGraph ){
+    public  static void init( TaskPanel taskGraph ){
         //init graph
         graph = new mxGraph();
         graphPanel = new mxGraphComponent(graph);
